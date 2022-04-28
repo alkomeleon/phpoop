@@ -2,14 +2,18 @@
 namespace app\models;
 
 
-class Orders extends Model
+class Orders extends DBModel
 {
-    public $order_id;
-    public $user_id;
-    public $prod_id;
-    public $count;
-    public $price;
+    protected $order_id;
+    protected $user_id;
+    protected $prod_id;
+    protected $count;
+    protected $price;
 
+    protected $props = [
+        'count' => false,
+        'price' => false
+    ];
 
     public function __construct($count = null, $price = null)
     {
@@ -18,7 +22,7 @@ class Orders extends Model
     }
 
 
-    protected function getTableName()
+    protected static function getTableName()
     {
         return 'orders';
     }

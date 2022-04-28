@@ -10,9 +10,71 @@ include "../config/config.php";
 
 spl_autoload_register([new Autoload(), 'loadClass']);
 
-$product = new Product();
-$product->getOne(9);
-var_dump($product);
+
+
+//
+//$product = Product::getOne(12);
+////$product->name = 'pizza';
+////$product->price = 100;
+//echo "<pre>";
+////$product->update();
+//var_dump($product);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//die();
+$controllerName = $_GET['c'] ?: 'product';
+$actionName = $_GET['a'];
+
+$controllerClass = CONTROLLER_NAMESPACE . ucfirst($controllerName) . 'Controller';
+
+if (class_exists($controllerClass)){
+    $controller = new $controllerClass();
+    $controller->runAction($actionName);
+} else {
+    die("нет такого контроллера");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//$product = new Product();
+//$product->getOne(9);
+
 //$product = new Product("Пицца","Описание", 125);
 //$product->insert();
 //echo "inserted product id: " . $product->id;
