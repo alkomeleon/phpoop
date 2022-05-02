@@ -7,6 +7,11 @@ class Controller
 {
     protected $action;
     protected $defaultAction = 'index';
+    protected $twig;
+
+    function __construct($twig) {
+        $this->twig = $twig;
+    }
 
     protected function actionIndex()
     {
@@ -26,17 +31,9 @@ class Controller
 
     public function render ($template, $params = [])
     {
-        return $this->renderTemplate('layouts/main', [
-            'menu' => $this->renderTemplate('menu', $params),
-            'content' => $this->renderTemplate($template, $params)
-        ]);
-    }
-
-    public function renderTemplate($template, $params = [])
-    {
-        ob_start();
-        extract($params);
-        include VIEWS_DIR . $template . '.php';
-        return ob_get_clean();
+        if (substr($template, -5) != '.twig') {
+            $template = $template . '.twig';
+        }
+        return $this->twig->render($template, $params);
     }
 }

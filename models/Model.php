@@ -16,6 +16,11 @@ abstract class Model implements IModel
         $this->$name = $value;
     }
 
+    public function __isset($name)
+    {
+        return isset($this->name);
+    }
+
     public function __get($name)
     {
         return $this->$name;

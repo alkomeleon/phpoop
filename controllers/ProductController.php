@@ -12,6 +12,7 @@ class ProductController extends Controller
     protected function actionCatalog()
     {
         $catalog = Product::getAll();
+//        echo $this->render('product/catalog', ['catalog' => $catalog]);
         echo $this->render('product/catalog', ['catalog' => $catalog]);
     }
 

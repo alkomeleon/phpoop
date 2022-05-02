@@ -10,35 +10,22 @@ include "../config/config.php";
 
 spl_autoload_register([new Autoload(), 'loadClass']);
 
+require_once '../vendor/autoload.php';
+
+$loader = new \Twig\Loader\FilesystemLoader(ROOT . DS .'templates');
+$twig = new \Twig\Environment($loader,
+    ['debug' => true]
+);
+$twig->addExtension(new \Twig\Extension\DebugExtension());
 
 
-//
-//$product = Product::getOne(12);
-////$product->name = 'pizza';
-////$product->price = 100;
-//echo "<pre>";
-////$product->update();
-//var_dump($product);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//die();
 $controllerName = $_GET['c'] ?: 'product';
 $actionName = $_GET['a'];
 
 $controllerClass = CONTROLLER_NAMESPACE . ucfirst($controllerName) . 'Controller';
 
 if (class_exists($controllerClass)){
-    $controller = new $controllerClass();
+    $controller = new $controllerClass($twig);
     $controller->runAction($actionName);
 } else {
     die("нет такого контроллера");
