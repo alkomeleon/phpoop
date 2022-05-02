@@ -20,25 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4b2fc9d-7c9b-4826-9da4-0f1d01a15d95" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/controllers/CartController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controllers/Controller.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controllers/ProductController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/DBModel.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/cart/cart.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/cart/checkout.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/index.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/layouts/main.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/menu.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/product/card.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/product/catalog.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/main.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/product/card.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/product/catalog.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/test.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/Db.php" beforeDir="false" afterPath="$PROJECT_DIR$/engine/Db.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interfaces/IModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/interfaces/IModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/ProductController.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/ProductController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/Model.php" beforeDir="false" afterPath="$PROJECT_DIR$/models/Model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/Orders.php" beforeDir="false" afterPath="$PROJECT_DIR$/models/Orders.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/Product.php" beforeDir="false" afterPath="$PROJECT_DIR$/models/Product.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/models/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,6 +42,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="289Ymd4CyFyYtkAOV2mVCpPvgkh" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -79,6 +71,8 @@
       <workItem from="1650647717819" duration="2728000" />
       <workItem from="1650815001874" duration="3934000" />
       <workItem from="1650899043441" duration="10963000" />
+      <workItem from="1651345771865" duration="1219000" />
+      <workItem from="1651499724960" duration="8431000" />
     </task>
     <servers />
   </component>
@@ -122,16 +116,9 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/2560.360.1920.1040@0.0.2560.1400" timestamp="1650901607771" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/controllers/CartController.php</url>
-          <line>10</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="2560" y="360" width="1936" height="1127" key="dock-window-1" timestamp="1651502287833">
+      <screen x="2560" y="360" width="1920" height="1040" />
+    </state>
+    <state x="2560" y="360" width="1936" height="1127" key="dock-window-1/0.0.2560.1400/2560.360.1920.1040@0.0.2560.1400" timestamp="1651502287833" />
   </component>
 </project>
