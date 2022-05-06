@@ -20,6 +20,23 @@ class User extends DBModel
         $this->pass = $pass;
     }
 
+    public static function Auth ($login, $pass) {
+        $user = User::getWhere("login", $login);
+        if ($pass == $user->pass) {
+            $_SESSION['login'] = $login;
+            return true;
+        }
+        return false;
+    }
+
+    public static function isAuth() {
+        return isset($_SESSION['login']);
+    }
+
+
+    public static function getName() {
+        return $_SESSION['login'];
+    }
 
     protected static function getTableName()
     {
