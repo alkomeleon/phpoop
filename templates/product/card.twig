@@ -8,6 +8,9 @@
             <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>
             <p>price: {{ product.price }}</p>
-            <button>Купить</button>
+            <button class="add_to_cart" data-id="{{ product.id }}">Купить</button>
         </div>
+{% endblock %}
+{% block script %}
+  <script src='/product.js'></script>
 {% endblock %}

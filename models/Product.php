@@ -1,7 +1,6 @@
 <?php
 namespace app\models;
 
-
 class Product extends DBModel
 {
     protected $id;
@@ -12,17 +11,18 @@ class Product extends DBModel
     protected $props = [
         'name' => false,
         'description' => false,
-        'price' => false
+        'price' => false,
     ];
 
-
-    public function __construct($name = null, $description = null, $price = null)
-    {
+    public function __construct(
+        $name = null,
+        $description = null,
+        $price = null
+    ) {
         $this->name = $name;
         $this->description = $description;
         $this->price = $price;
     }
-
 
     protected static function getTableName()
     {

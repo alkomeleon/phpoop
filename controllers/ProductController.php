@@ -1,6 +1,5 @@
 <?php
 
-
 namespace app\controllers;
 
 use app\models\Product;
@@ -12,15 +11,14 @@ class ProductController extends Controller
     protected function actionCatalog()
     {
         $catalog = Product::getAll();
-//        echo $this->render('product/catalog', ['catalog' => $catalog]);
+        //        echo $this->render('product/catalog', ['catalog' => $catalog]);
         echo $this->render('product/catalog', ['catalog' => $catalog]);
     }
 
     protected function actionCard()
     {
-        $id = $_GET['id'];
+        $id = $this->request->getParams()['id'];
         $product = Product::getOne($id);
         echo $this->render('product/card', ['product' => $product]);
     }
-
 }
