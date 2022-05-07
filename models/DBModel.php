@@ -1,13 +1,12 @@
 <?php
 
-
 namespace app\models;
 
 use app\engine\Db;
 
 abstract class DBModel extends Model
 {
-    protected abstract static function getTableName();
+    abstract protected static function getTableName();
 
     public function insert()
     {
@@ -19,11 +18,10 @@ abstract class DBModel extends Model
         $tableName = static::getTableName();
 
         $sql = "INSERT INTO `{$tableName}` (`";
-        $sql .= implode("`, `", array_keys($params));
-        $sql .= "`) VALUES (:";
-        $sql .= implode(", :", array_keys($params));
-        $sql .= ");";
-
+        $sql .= implode('`, `', array_keys($params));
+        $sql .= '`) VALUES (:';
+        $sql .= implode(', :', array_keys($params));
+        $sql .= ');';
 
         Db::getInstance()->execute($sql, $params);
         $this->id = Db::getInstance()->lastInsertId();
@@ -34,8 +32,10 @@ abstract class DBModel extends Model
     {
         $params = [];
         foreach ($this->props as $key => $value) {
-            if (!$value) continue;
-            $params[$key] = $key . '="' . $this->$key . '"';
+            if (!$value) {
+                continue;
+            }
+            $params[$key] = '`' . $key . '`="' . $this->$key . '"';
         }
 
         if (count($params) == 0) {
@@ -45,8 +45,8 @@ abstract class DBModel extends Model
         $tableName = static::getTableName();
 
         $params_str = implode(', ', $params);
-        $sql = "UPDATE `{$tableName}` SET {$params_str};";
-        Db::getInstance()->execute($sql, $params);
+        $sql = "UPDATE `{$tableName}` SET {$params_str} WHERE `id`=:id;";
+        Db::getInstance()->execute($sql, ['id' => $this->id]);
         return $this;
     }
 
@@ -54,29 +54,56 @@ abstract class DBModel extends Model
     {
         $id = $this->id;
         $tableName = $this->getTableName();
-        $sql = "DELETE FROM `{$tableName}` WHERE id = :id";
+        $sql = "DELETE FROM `{$tableName}` WHERE `id` = :id";
         return Db::getInstance()->execute($sql, ['id' => $id]);
     }
 
     public static function getOne($id)
     {
         $tableName = static::getTableName();
-        $sql = "SELECT * FROM {$tableName} WHERE id = :id";
-//        $params = Db::getInstance()->queryOne($sql, ['id' => $id]);
-//        foreach ($params as $key => $value) {
-//            $this->$key = $value;
-//            if ($key == 'id') {
-//                $this->id = intval($value);
-//            }
-//        }
-//        return $this;
-        return Db::getInstance()->queryOneObject($sql, ['id' => $id], static::class);
+        $sql = "SELECT * FROM `{$tableName}` WHERE `id` = :id";
+        $item = Db::getInstance()->queryOneObject(
+            $sql,
+            ['id' => $id],
+            static::class
+        );
+        if (!$item) {
+            return null;
+        }
+        return $item;
     }
 
     public static function getAll()
     {
         $tableName = static::getTableName();
         $sql = "SELECT * FROM {$tableName}";
-        return Db::getInstance()->queryAll($sql);
+        return Db::getInstance()->queryAll($sql, [], static::class);
+    }
+
+    public static function getWhere($name, $value)
+    {
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` WHERE `{$name}` = :value";
+        $item = Db::getInstance()->queryOneObject(
+            $sql,
+            ['value' => $value],
+            static::class
+        );
+        if (!$item) {
+            return null;
+        }
+        return $item;
+    }
+
+    public static function getAllWhere($name, $value)
+    {
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` WHERE `{$name}` = :value";
+        $items = Db::getInstance()->queryAll(
+            $sql,
+            ['value' => $value],
+            static::class
+        );
+        return $items;
     }
 }

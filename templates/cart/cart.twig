@@ -1,0 +1,32 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+  Корзина
+{% endblock %}
+
+{% block content %}
+  <h2>
+    Корзина
+  </h2>
+  {% for item in cart.getItems %}
+    <div class="cart_item" data-id="{{ item.getProductId }}">
+      <a href="/?c=product&a=card&id={{ item.getProductId }}">
+        {{ item.getProduct.name }}
+      </a>
+      - <span class="count">{{ item.getCount }}</span>
+      <br />
+      <button class="remove_one_btn" data-id="{{ item.getProductId }}">
+        удалить
+      </button>
+      <button class="remove_all_btn" data-id="{{ item.getProductId }}">
+        удалить все
+      </button>
+    </div>
+  {% endfor %}
+  <br />
+  <hr />
+  <button class="clear_cart_btn">Очистить корзину</button>
+{% endblock %}
+{% block script %}
+  <script src='/cart.js'></script>
+{% endblock %}

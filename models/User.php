@@ -1,25 +1,24 @@
 <?php
 
 namespace app\models;
-
+use app\engine\Session;
 
 class User extends DBModel
 {
     protected $id;
     protected $login;
-    protected $pass;
+    protected $password;
 
     protected $props = [
         'login' => false,
-        'pass' => false
+        'password' => false,
     ];
 
-    public function __construct($login = null, $pass = null)
+    public function __construct($login = null, $password = null)
     {
         $this->login = $login;
-        $this->pass = $pass;
+        $this->password = $password;
     }
-
 
     protected static function getTableName()
     {

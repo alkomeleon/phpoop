@@ -1,7 +1,6 @@
 <?php
 namespace app\models;
 
-
 class Orders extends DBModel
 {
     protected $order_id;
@@ -12,7 +11,7 @@ class Orders extends DBModel
 
     protected $props = [
         'count' => false,
-        'price' => false
+        'price' => false,
     ];
 
     public function __construct($count = null, $price = null)
@@ -20,7 +19,6 @@ class Orders extends DBModel
         $this->count = $count;
         $this->price = $price;
     }
-
 
     protected static function getTableName()
     {

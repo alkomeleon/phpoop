@@ -1,14 +1,25 @@
 {% extends 'main.twig' %}
 
-{% block title %}Products catalog{% endblock %}
+{% block title %}
+  Products catalog
+{% endblock %}
 
 {% block content %}
-    <h2>Каталог</h2>
-    {% for item in catalog %}
-        <div>
-            <h3><a href="/?c=product&a=card&id={{ item.id }}">{{ item.name }}</a></h3>
-            <p>price: {{ item.price }}</p>
-            <button>Купить</button>
-        </div>
-    {% endfor %}
+  <h2>
+    Каталог
+  </h2>
+  {% for item in catalog %}
+    <div>
+      <h3>
+        <a href="/?c=product&a=card&id={{ item.id }}">{{ item.name }}</a>
+      </h3>
+      <p>
+        price: {{ item.price }}
+      </p>
+      <button class="add_to_cart" data-id="{{ item.id }}">Купить</button>
+    </div>
+  {% endfor %}
+{% endblock %}
+{% block script %}
+  <script src='/product.js'></script>
 {% endblock %}
