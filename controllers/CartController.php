@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\{Product, Cart, CartItem};
+use app\models\Cart;
 use app\engine\{Session};
 
 class CartController extends Controller
@@ -26,7 +26,7 @@ class CartController extends Controller
             $response['result'] = 'ok';
         }
         $response['cart_count'] = $cart->count();
-        echo json_encode($response);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     protected function actionRemoveOne()
@@ -38,9 +38,11 @@ class CartController extends Controller
         if ($cart->removeOne($id)) {
             $response['result'] = 'ok';
             $response['item_count'] = $cart->itemCount($id);
+            $response['item_price'] = $cart->itemPrice($id);
+            $response['cart_price'] = $cart->getTotalPrice($id);
         }
         $response['cart_count'] = $cart->count();
-        echo json_encode($response);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     protected function actionRemoveAll()
@@ -51,9 +53,10 @@ class CartController extends Controller
         $response = ['result' => 'error'];
         if ($cart->removeAll($id)) {
             $response['result'] = 'ok';
+            $response['cart_price'] = $cart->getTotalPrice($id);
         }
         $response['cart_count'] = $cart->count();
-        echo json_encode($response);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     protected function actionClear()
@@ -63,9 +66,10 @@ class CartController extends Controller
         $response = ['result' => 'error'];
         if ($cart->clear()) {
             $response['result'] = 'ok';
+            $response['cart_price'] = $cart->getTotalPrice($id);
         }
         $response['cart_count'] = $cart->count();
-        echo json_encode($response);
+        echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     protected function actionCheckout()

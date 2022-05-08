@@ -1,7 +1,8 @@
 <?php
-namespace app\models;
+namespace app\models\entities;
+use app\models\Model;
 
-class Session extends DBModel
+class Session extends Model
 {
     protected $id;
     protected $key;
@@ -19,10 +20,5 @@ class Session extends DBModel
         $this->key = $key;
         $this->user_id = $user_id;
         $this->expires = $expires;
-    }
-
-    protected static function getTableName()
-    {
-        return 'sessions';
     }
 }

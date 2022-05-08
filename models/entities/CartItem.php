@@ -1,8 +1,10 @@
 <?php
-namespace app\models;
-use app\models\Product;
+namespace app\models\entities;
+use app\models\entities\Product;
+use app\models\repositories\{ProductRepository, CartItemRepository};
+use app\models\Model;
 
-class CartItem extends DBModel
+class CartItem extends Model
 {
     protected $id;
     protected $session_id;
@@ -30,7 +32,7 @@ class CartItem extends DBModel
         if ($this->product_id == null) {
             return null;
         }
-        return Product::getOne($this->product_id);
+        return (new ProductRepository())->getOne($this->product_id);
     }
 
     public function getPrice()
@@ -65,7 +67,7 @@ class CartItem extends DBModel
     {
         $this->product_count += 1;
         $this->props['product_count'] = true;
-        $this->update();
+        (new CartItemRepository())->save($this);
         return true;
     }
 
@@ -74,16 +76,11 @@ class CartItem extends DBModel
         if ($this->product_count > 1) {
             $this->product_count -= 1;
             $this->props['product_count'] = true;
-            $this->update();
+            (new CartItemRepository())->save($this);
             return $this->product_count;
         } else {
-            $this->delete();
+            (new CartItemRepository())->delete($this);
             return 0;
         }
-    }
-
-    protected static function getTableName()
-    {
-        return 'cart';
     }
 }

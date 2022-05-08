@@ -2,8 +2,8 @@
 
 namespace app\engine;
 use app\engine\Db;
-use app\models\User;
-use app\models\Session as SessionDb;
+use app\models\entities\Session as SessionEntity;
+use app\models\repositories\{SessionRepository, UserRepository};
 
 class Session
 {
@@ -23,7 +23,10 @@ class Session
             array_key_exists(COOKIE_NAME, $_COOKIE) and
             $_COOKIE[COOKIE_NAME] != ''
         ) {
-            $session = SessionDb::getWhere('key', $_COOKIE[COOKIE_NAME]);
+            $session = (new SessionRepository())->getWhere(
+                'key',
+                $_COOKIE[COOKIE_NAME]
+            );
             if ($session) {
                 if (
                     $session->expires != null and
@@ -33,7 +36,7 @@ class Session
                 }
                 $this->session = $session;
                 if ($session->user_id != null) {
-                    $user = User::getOne($session->user_id);
+                    $user = (new UserRepository())->getOne($session->user_id);
                     $this->user = $user;
                 }
                 return true;
@@ -45,14 +48,14 @@ class Session
     protected function startSession()
     {
         $session_key = bin2hex(random_bytes(32));
-        $this->session = new SessionDb($session_key);
-        $this->session->insert();
+        $this->session = new SessionEntity($session_key);
+        (new SessionRepository())->insert($this->session);
         setcookie(COOKIE_NAME, $session_key, ['httponly' => true]);
     }
 
     public function auth($login, $password, $remember)
     {
-        $user = User::getWhere('login', $login);
+        $user = (new UserRepository())->getWhere('login', $login);
         if (password_verify($password, $user->password)) {
             $this->session->user_id = $user->id;
             if ($remember) {
@@ -67,7 +70,7 @@ class Session
                     'httponly' => true,
                 ]);
             }
-            $this->session->update();
+            (new SessionRepository())->save($this->session);
             $this->user = $user;
             return true;
         }
@@ -89,6 +92,11 @@ class Session
         return $this->user->login;
     }
 
+    public function getUser()
+    {
+        return $this->user;
+    }
+
     public function isAuthenticated()
     {
         return isset($this->user);
@@ -97,7 +105,7 @@ class Session
     public function destroy()
     {
         $this->session->expires = 0;
-        $this->session->update();
+        (new SessionRepository())->save($this->session);
         $this->user = null;
         unset($_COOKIE[COOKIE_NAME]);
         setcookie(COOKIE_NAME, '', time() - 3600);

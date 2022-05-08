@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\Product;
+use app\models\repositories\ProductRepository;
 
 class ProductController extends Controller
 {
@@ -10,7 +10,7 @@ class ProductController extends Controller
 
     protected function actionCatalog()
     {
-        $catalog = Product::getAll();
+        $catalog = (new ProductRepository())->getAll();
         //        echo $this->render('product/catalog', ['catalog' => $catalog]);
         echo $this->render('product/catalog', ['catalog' => $catalog]);
     }
@@ -18,7 +18,7 @@ class ProductController extends Controller
     protected function actionCard()
     {
         $id = $this->request->getParams()['id'];
-        $product = Product::getOne($id);
+        $product = (new ProductRepository())->getOne($id);
         echo $this->render('product/card', ['product' => $product]);
     }
 }
