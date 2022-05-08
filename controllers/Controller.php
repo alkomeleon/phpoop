@@ -4,7 +4,7 @@ namespace app\controllers;
 use app\models\{User, Cart};
 use app\engine\{Request, Session};
 
-abstract class Controller
+class Controller
 {
     protected $action;
     protected $defaultAction = 'index';
