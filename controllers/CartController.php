@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\engine\App;
 use app\models\Cart;
 use app\engine\{Session};
 
@@ -11,16 +12,14 @@ class CartController extends Controller
 
     protected function actionCart()
     {
-        $session = new Session();
-        $cart = new Cart($session->getId());
+        $cart = App::call()->cart;
         echo $this->render('cart/cart', ['cart' => $cart]);
     }
 
     protected function actionAdd()
     {
-        $session = new Session();
-        $id = $this->request->getParams()['id'];
-        $cart = new Cart($session->getId());
+        $id = App::call()->request->getParams()['id'];
+        $cart = App::call()->cart;
         $response = ['result' => 'error'];
         if ($cart->add($id)) {
             $response['result'] = 'ok';
@@ -31,9 +30,8 @@ class CartController extends Controller
 
     protected function actionRemoveOne()
     {
-        $session = new Session();
-        $id = $this->request->getParams()['id'];
-        $cart = new Cart($session->getId());
+        $id = App::call()->request->getParams()['id'];
+        $cart = App::call()->cart;
         $response = ['result' => 'error'];
         if ($cart->removeOne($id)) {
             $response['result'] = 'ok';
@@ -47,9 +45,8 @@ class CartController extends Controller
 
     protected function actionRemoveAll()
     {
-        $session = new Session();
-        $id = $this->request->getParams()['id'];
-        $cart = new Cart($session->getId());
+        $id = App::call()->request->getParams()['id'];
+        $cart = App::call()->cart;
         $response = ['result' => 'error'];
         if ($cart->removeAll($id)) {
             $response['result'] = 'ok';
@@ -61,8 +58,7 @@ class CartController extends Controller
 
     protected function actionClear()
     {
-        $session = new Session();
-        $cart = new Cart($session->getId());
+        $cart = App::call()->cart;
         $response = ['result' => 'error'];
         if ($cart->clear()) {
             $response['result'] = 'ok';
@@ -70,10 +66,5 @@ class CartController extends Controller
         }
         $response['cart_count'] = $cart->count();
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-    }
-
-    protected function actionCheckout()
-    {
-        echo $this->render('cart/checkout', []);
     }
 }

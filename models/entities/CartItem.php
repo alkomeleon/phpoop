@@ -1,7 +1,7 @@
 <?php
 namespace app\models\entities;
 use app\models\entities\Product;
-use app\models\repositories\{ProductRepository, CartItemRepository};
+use app\engine\App;
 use app\models\Model;
 
 class CartItem extends Model
@@ -32,7 +32,7 @@ class CartItem extends Model
         if ($this->product_id == null) {
             return null;
         }
-        return (new ProductRepository())->getOne($this->product_id);
+        return App::call()->productRepository->getOne($this->product_id);
     }
 
     public function getPrice()
@@ -67,7 +67,7 @@ class CartItem extends Model
     {
         $this->product_count += 1;
         $this->props['product_count'] = true;
-        (new CartItemRepository())->save($this);
+        App::call()->cartItemRepository->save($this);
         return true;
     }
 
@@ -76,10 +76,10 @@ class CartItem extends Model
         if ($this->product_count > 1) {
             $this->product_count -= 1;
             $this->props['product_count'] = true;
-            (new CartItemRepository())->save($this);
+            App::call()->cartItemRepository->save($this);
             return $this->product_count;
         } else {
-            (new CartItemRepository())->delete($this);
+            App::call()->cartItemRepository->delete($this);
             return 0;
         }
     }

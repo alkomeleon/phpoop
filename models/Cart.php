@@ -1,7 +1,7 @@
 <?php
 namespace app\models;
-use app\models\repositories\{ProductRepository, CartItemRepository};
 use app\models\entities\CartItem;
+use app\engine\App;
 
 class Cart
 {
@@ -11,9 +11,12 @@ class Cart
     public function __construct($session_id = null)
     {
         $this->session_id = $session_id;
-        $this->items = (new CartItemRepository())->getAllWhere(
+        if (is_null($session_id)) {
+            $this->session_id = App::call()->session->getId();
+        }
+        $this->items = App::call()->cartItemRepository->getAllWhere(
             'session_id',
-            $session_id
+            $this->session_id
         );
     }
 
@@ -31,12 +34,12 @@ class Cart
             }
         }
         if (!$product_in_cart) {
-            $product = (new ProductRepository())->getOne($product_id);
+            $product = App::call()->productRepository->getOne($product_id);
             if (!$product) {
                 return false;
             }
             $item = new CartItem($this->session_id, $product_id, 1);
-            (new CartItemRepository())->save($item);
+            App::call()->cartItemRepository->save($item);
             array_push($this->items, $item);
         }
         return true;
@@ -65,7 +68,7 @@ class Cart
         }
         foreach ($this->items as $key => $item) {
             if ($item->product_id == $product_id) {
-                (new CartItemRepository())->delete($item);
+                App::call()->cartItemRepository->delete($item);
                 unset($this->items[$key]);
                 return true;
             }
@@ -114,7 +117,7 @@ class Cart
     public function clear()
     {
         foreach ($this->items as $item) {
-            (new CartItemRepository())->delete($item);
+            App::call()->cartItemRepository->delete($item);
         }
         $this->items = [];
         return true;

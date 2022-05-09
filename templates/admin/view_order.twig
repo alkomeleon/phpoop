@@ -1,0 +1,28 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+  Products catalog
+{% endblock %}
+
+{% block content %}
+  <h2>
+    Заказ №{{ order.id }}
+  </h2>
+  <div>
+    <h3>
+      Статус: {{ order.getStatusText() }}
+    </h3>
+    <ol>
+      {% for item in order.getContents() %}
+        <li>
+          {{ item.getProduct().name }} ({{ item.getCount() }} шт.) -
+          {{ item.getCount() * item.getPrice() }} руб.
+        </li>
+      {% endfor %}
+    </ol>
+    <p>
+      Сумма заказа: {{ order.getTotalPrice() }} руб.
+    </p>
+  </div>
+  <br />
+{% endblock %}
