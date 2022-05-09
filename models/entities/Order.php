@@ -3,11 +3,7 @@ namespace app\models\entities;
 
 use app\models\Model;
 use app\models\entities\OrderItem;
-use app\models\repositories\{
-    CartItemRepository,
-    OrderItemRepository,
-    OrderRepository
-};
+use app\engine\App;
 
 class Order extends Model
 {
@@ -42,7 +38,7 @@ class Order extends Model
         if (is_null($this->id)) {
             return false;
         }
-        $items = (new CartItemRepository())->getAllWhere(
+        $items = App::call()->cartItemRepository->getAllWhere(
             'session_id',
             $session_id
         );
@@ -53,7 +49,7 @@ class Order extends Model
                 $item->product_count,
                 $item->getPrice()
             );
-            (new OrderItemRepository())->save($orderItem);
+            App::call()->orderItemRepository->save($orderItem);
         }
         return true;
     }
@@ -62,17 +58,26 @@ class Order extends Model
     {
         $this->status = 1;
         $this->props['status'] = true;
-        (new OrderRepository())->save($this);
+        App::call()->orderRepository->save($this);
         return $this->status;
     }
 
     public function getContents()
     {
-        $items = (new OrderItemRepository())->getAllWhere(
+        $items = App::call()->orderItemRepository->getAllWhere(
             'order_id',
             $this->id
         );
         return $items;
+    }
+
+    public function getCount()
+    {
+        $items = App::call()->orderItemRepository->getAllWhere(
+            'order_id',
+            $this->id
+        );
+        return count($items);
     }
 
     public function getTotalPrice()

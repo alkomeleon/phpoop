@@ -3,4 +3,7 @@
   <a href="/?c=product&a=catalog">Каталог</a>
   <a href="/?c=cart">Корзина (<span id="cart_count">{{ cartCount }}</span>)</a>
   <a href="/?c=order">Заказы</a>
+  {% if userRole == 'admin' %}
+    <a href="/?c=admin&a=orders">Управление заказами</a>
+  {% endif %}
 {% endblock %}

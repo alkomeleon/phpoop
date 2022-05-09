@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use app\engine\Db;
+use app\engine\App;
 use app\interfaces\IRepository;
 
 abstract class Repository implements IRepository
@@ -25,8 +25,8 @@ abstract class Repository implements IRepository
         $sql .= implode(', :', array_keys($params));
         $sql .= ');';
 
-        Db::getInstance()->execute($sql, $params);
-        $entity->id = Db::getInstance()->lastInsertId();
+        App::call()->db->execute($sql, $params);
+        $entity->id = App::call()->db->lastInsertId();
         return true;
     }
 
@@ -48,7 +48,7 @@ abstract class Repository implements IRepository
 
         $params_str = implode(', ', $params);
         $sql = "UPDATE `{$tableName}` SET {$params_str} WHERE `id`=:id;";
-        Db::getInstance()->execute($sql, ['id' => $entity->id]);
+        App::call()->db->execute($sql, ['id' => $entity->id]);
         return true;
     }
 
@@ -57,7 +57,7 @@ abstract class Repository implements IRepository
         $id = $entity->id;
         $tableName = $this->getTableName();
         $sql = "DELETE FROM `{$tableName}` WHERE `id` = :id";
-        return Db::getInstance()->execute($sql, ['id' => $id]);
+        return App::call()->db->execute($sql, ['id' => $id]);
     }
 
     public function save(Model $entity)
@@ -73,7 +73,7 @@ abstract class Repository implements IRepository
     {
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}` WHERE `id` = :id";
-        $item = Db::getInstance()->queryOneObject(
+        $item = App::call()->db->queryOneObject(
             $sql,
             ['id' => $id],
             $this->getEntityClass()
@@ -88,14 +88,14 @@ abstract class Repository implements IRepository
     {
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM {$tableName}";
-        return Db::getInstance()->queryAll($sql, [], $this->getEntityClass());
+        return App::call()->db->queryAll($sql, [], $this->getEntityClass());
     }
 
     public function getWhere($name, $value)
     {
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}` WHERE `{$name}` = :value";
-        $item = Db::getInstance()->queryOneObject(
+        $item = App::call()->db->queryOneObject(
             $sql,
             ['value' => $value],
             $this->getEntityClass()
@@ -110,7 +110,7 @@ abstract class Repository implements IRepository
     {
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}` WHERE `{$name}` = :value";
-        $items = Db::getInstance()->queryAll(
+        $items = App::call()->db->queryAll(
             $sql,
             ['value' => $value],
             $this->getEntityClass()

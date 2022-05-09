@@ -9,15 +9,18 @@ class User extends Model
     protected $id;
     protected $login;
     protected $password;
+    protected $role;
 
     protected $props = [
         'login' => false,
         'password' => false,
+        'role' => false,
     ];
 
-    public function __construct($login = null, $password = null)
+    public function __construct($login = null, $password = null, $role = null)
     {
         $this->login = $login;
         $this->password = $password;
+        $this->role = $password;
     }
 }

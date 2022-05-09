@@ -2,7 +2,7 @@
 namespace app\models\entities;
 
 use app\models\Model;
-use app\models\repositories\ProductRepository;
+use app\engine\App;
 
 class OrderItem extends Model
 {
@@ -33,7 +33,7 @@ class OrderItem extends Model
 
     public function getProduct()
     {
-        $product = (new ProductRepository())->getOne($this->product_id);
+        $product = App::call()->productRepository->getOne($this->product_id);
         return $product;
     }
 

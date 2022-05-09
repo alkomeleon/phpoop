@@ -2,10 +2,8 @@
 
 namespace app\controllers;
 
-use app\models\repositories\OrderRepository;
+use app\engine\App;
 use app\models\entities\Order;
-use app\models\Cart;
-use app\engine\Session;
 
 class OrderController extends Controller
 {
@@ -13,10 +11,10 @@ class OrderController extends Controller
 
     protected function actionList()
     {
-        $session = new Session();
+        $session = App::call()->session;
         $orders = [];
         if ($session->isAuthenticated()) {
-            $orders = (new OrderRepository())->getAllWhere(
+            $orders = App::call()->orderRepository->getAllWhere(
                 'user_id',
                 $session->getUser()->id
             );
@@ -26,20 +24,20 @@ class OrderController extends Controller
 
     protected function actionCheckout()
     {
-        $session = new Session();
+        $session = App::call()->session;
         if (!$session->isAuthenticated()) {
             header('Location: /?c=cart');
             die();
         }
-        $name = $this->request->getParams()['name'];
-        $phone = $this->request->getParams()['phone'];
+        $name = App::call()->request->getParams()['name'];
+        $phone = App::call()->request->getParams()['phone'];
         $order = new Order($session->getUser()->id, $name, $phone);
-        (new OrderRepository())->save($order);
+        App::call()->orderRepository->save($order);
         if (!$order->fill($session->getId())) {
             header('Location: /?c=cart');
             die();
         }
-        (new Cart($session->getId()))->clear();
+        App::call()->cart->clear();
         $order->checkout();
         echo $this->render('order/success', ['order' => $order]);
     }

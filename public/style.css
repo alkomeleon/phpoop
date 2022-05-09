@@ -11,11 +11,21 @@ body {
   width: 100%;
 }
 .header .menu {
-  width: 30%;
+  width: 40%;
 }
 .cart_item {
   margin-bottom: 20px;
 }
 button {
   user-select: none;
+}
+.table {
+  border-collapse: collapse;
+  margin: 15px auto;
+}
+.table td,
+.table th {
+  border: 1px solid #eee;
+  padding: 5px 15px;
+  min-width: 100px;
 }
