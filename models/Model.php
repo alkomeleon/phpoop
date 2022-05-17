@@ -2,12 +2,8 @@
 
 namespace app\models;
 
-use app\interfaces\IModel;
-
-abstract class Model implements IModel
+abstract class Model
 {
-    protected $props = [];
-
     public function __set($name, $value)
     {
         if (array_key_exists($name, $this->props) and $this->$name !== $value) {

@@ -1,17 +1,18 @@
 <?php
 
 namespace app\engine;
-use app\engine\Db;
-use app\models\User;
-use app\models\Session as SessionDb;
+use app\engine\{Db, App};
+use app\models\entities\Session as SessionEntity;
 
 class Session
 {
     protected $session;
     protected $user = null;
+    protected $cookie_name = null;
 
     public function __construct()
     {
+        $this->cookie_name = App::call()->config['COOKIE_NAME'];
         if (!$this->getSession()) {
             $this->startSession();
         }
@@ -20,10 +21,13 @@ class Session
     protected function getSession()
     {
         if (
-            array_key_exists(COOKIE_NAME, $_COOKIE) and
-            $_COOKIE[COOKIE_NAME] != ''
+            array_key_exists($this->cookie_name, $_COOKIE) and
+            $_COOKIE[$this->cookie_name] != ''
         ) {
-            $session = SessionDb::getWhere('key', $_COOKIE[COOKIE_NAME]);
+            $session = App::call()->sessionRepository->getWhere(
+                'key',
+                $_COOKIE[$this->cookie_name]
+            );
             if ($session) {
                 if (
                     $session->expires != null and
@@ -33,7 +37,9 @@ class Session
                 }
                 $this->session = $session;
                 if ($session->user_id != null) {
-                    $user = User::getOne($session->user_id);
+                    $user = App::call()->userRepository->getOne(
+                        $session->user_id
+                    );
                     $this->user = $user;
                 }
                 return true;
@@ -45,29 +51,29 @@ class Session
     protected function startSession()
     {
         $session_key = bin2hex(random_bytes(32));
-        $this->session = new SessionDb($session_key);
-        $this->session->insert();
-        setcookie(COOKIE_NAME, $session_key, ['httponly' => true]);
+        $this->session = new SessionEntity($session_key);
+        App::call()->sessionRepository->insert($this->session);
+        setcookie($this->cookie_name, $session_key, ['httponly' => true]);
     }
 
     public function auth($login, $password, $remember)
     {
-        $user = User::getWhere('login', $login);
+        $user = App::call()->userRepository->getWhere('login', $login);
         if (password_verify($password, $user->password)) {
             $this->session->user_id = $user->id;
             if ($remember) {
                 $expires = time() + 60 * 60 * 24 * 7;
                 $this->session->expires = $expires;
-                setcookie(COOKIE_NAME, $this->session->key, [
+                setcookie($this->cookie_name, $this->session->key, [
                     'expires' => $expires,
                     'httponly' => true,
                 ]);
             } else {
-                setcookie(COOKIE_NAME, $this->session->key, [
+                setcookie($this->cookie_name, $this->session->key, [
                     'httponly' => true,
                 ]);
             }
-            $this->session->update();
+            App::call()->sessionRepository->save($this->session);
             $this->user = $user;
             return true;
         }
@@ -89,6 +95,11 @@ class Session
         return $this->user->login;
     }
 
+    public function getUser()
+    {
+        return $this->user;
+    }
+
     public function isAuthenticated()
     {
         return isset($this->user);
@@ -97,9 +108,9 @@ class Session
     public function destroy()
     {
         $this->session->expires = 0;
-        $this->session->update();
+        App::call()->sessionRepository->save($this->session);
         $this->user = null;
-        unset($_COOKIE[COOKIE_NAME]);
-        setcookie(COOKIE_NAME, '', time() - 3600);
+        unset($_COOKIE[$this->cookie_name]);
+        setcookie($this->cookie_name, '', time() - 3600);
     }
 }

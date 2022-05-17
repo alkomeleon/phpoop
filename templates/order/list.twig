@@ -1,0 +1,32 @@
+{% extends 'main.twig' %}
+
+{% block title %}
+  Products catalog
+{% endblock %}
+
+{% block content %}
+  <h2>
+    Мои заказы
+  </h2>
+  {% for order in orders %}
+    {% if order.status > 0 %}
+      <div>
+        <h3>
+          Заказ №{{ order.id }} - {{ order.getStatusText() }}
+        </h3>
+        <ol>
+          {% for item in order.getContents() %}
+            <li>
+              {{ item.getProduct().name }} ({{ item.getCount() }} шт.) -
+              {{ item.getCount() * item.getPrice() }} руб.
+            </li>
+          {% endfor %}
+        </ol>
+        <p>
+          Сумма заказа: {{ order.getTotalPrice() }} руб.
+        </p>
+      </div>
+      <br />
+    {% endif %}
+  {% endfor %}
+{% endblock %}

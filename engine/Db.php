@@ -6,18 +6,24 @@ use app\traits\TSingletone;
 
 class Db
 {
-    private $config = [
-        'driver' => 'mysql',
-        'host' => 'localhost:3306',
-        'login' => 'root',
-        'password' => 'root',
-        'database' => 'shop',
-        'charset' => 'utf8',
-    ];
-
+    private $config = [];
     private $connection = null; //PDO
 
-    use TSingletone;
+    public function __construct(
+        $driver = null,
+        $host = null,
+        $login = null,
+        $password = null,
+        $database = null,
+        $charset = 'utf8'
+    ) {
+        $this->config['driver'] = $driver;
+        $this->config['host'] = $host;
+        $this->config['login'] = $login;
+        $this->config['password'] = $password;
+        $this->config['database'] = $database;
+        $this->config['charset'] = $charset;
+    }
 
     private function getConnection()
     {
@@ -51,7 +57,6 @@ class Db
         );
     }
 
-    //sql = "SELECT * FROM `products` WHERE id = :id" $params = ['id'=>1]
     private function query($sql, $params)
     {
         $STH = $this->getConnection()->prepare($sql);

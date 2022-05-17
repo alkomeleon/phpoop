@@ -1,20 +1,19 @@
 <?php
 
 namespace app\controllers;
+use app\engine\App;
 use app\models\{User, Cart};
 use app\engine\{Request, Session};
 
-abstract class Controller
+class Controller
 {
     protected $action;
     protected $defaultAction = 'index';
     protected $twig;
-    protected $request;
 
     function __construct($twig)
     {
         $this->twig = $twig;
-        $this->request = new Request();
     }
 
     protected function actionIndex()
@@ -38,10 +37,11 @@ abstract class Controller
         if (substr($template, -5) != '.twig') {
             $template = $template . '.twig';
         }
-        $session = new Session();
+        $session = App::call()->session;
         $params['isAuthenticated'] = $session->isAuthenticated();
+        $params['userRole'] = $session->getUser()->role;
         $params['username'] = $session->getLogin();
-        $cart = new Cart($session->getId());
+        $cart = App::call()->cart;
         $params['cartCount'] = $cart->count();
         return $this->twig->render($template, $params);
     }
